@@ -16,10 +16,11 @@ def main():
               "*        5      -     Print only a summery of student data                *\n" +
               "*        6      -     Print the entire student data file to command line  *\n" +
               "*        0      -     Quit                                                *\n" +
-        "***************************************************************************\n")
+              "***************************************************************************\n")
         print("Welcome to Student Database System!")
         read_entry = input("Enter a selection from the menu (Or 0 to quit): ")
-        if student_data_manager(read_entry)== 2:
+        if student_data_manager(read_entry) == 2:
             break
+
 
 main()
