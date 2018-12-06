@@ -18,5 +18,5 @@ def create_new_file(file_name):
         marks = input("Enter Student Marks: \n")
         grade = calculate_letter_grade(marks)
         new_file.write(student_name + "," + id + "," + marks + "," + grade + "\n")
-        entry = int(input("\n\nDo you want to enter another data? 1 = Y, 0 = N: "))
+        entry = int(input("\nDo you want to enter another data? 1 = Y, 0 = N: "))
     new_file.close()
