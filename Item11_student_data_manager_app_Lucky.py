@@ -1,3 +1,63 @@
+     # Item 11 -- Student Data Manager App (COMBINED)
+
+
+
+
+
+
+#  Item 14
+def get_non_empty_input(question):
+    """ This function checks for non empty input and prompts
+    the user to enter a non empty data """
+
+    value = input(question)
+    value = value.trim()
+    while value == "":
+        print("No value entered. Please enter a value.")
+        value = input(question)
+        value = value.trim()
+    return value
+
+
+#  Item 13
+def write_from_dictionary_to_file(d, filename):
+    """ This method writes comma separated values from dictionary to file"""
+
+    # open the file in write mode
+    f = open(filename, "w")
+
+    # if the id (key) exists in the dictionary, write the key and values in the file
+    for key in d:
+        value_list = d[key]
+        f.write(key + "," + value_list[0] + "," + value_list[1] + "," + value_list[2] + "\n")
+    f.close()
+
+
+
+#  Item 12
+def load_csv_file_to_dictionary(fname):
+    student_id_data = {}
+
+    f = open(fname, "r")
+    lines = f.readlines()
+    f.close()
+    data_lines = lines[1:]
+
+    for line in data_lines:
+        line = line.strip()
+        words = line.split(",")
+        student_names = words[0]
+        student_id = words[1]
+        final_marks = float(words[2])
+        final_grade = words[3]
+        student_id_data[student_id] = {}
+        student_id_data[student_id]["Student Name"] = student_names
+        student_id_data[student_id]["Final Marks"] = final_marks
+        student_id_data[student_id]["Final Grade"] = final_grade
+
+    return student_id_data
+
+
 #  Item 8
 def is_all_digit(user_input):
     """
@@ -66,26 +126,72 @@ def create_new_file(file_name):
 
 # Item 2
 def update_file(file_to_update):
-    return "Need to Complete"
+
+    dictionary_file = load_csv_file_to_dictionary(file_to_update)
+
+    print("Enter 1 - to add a New Student\n" +
+          "Enter 2 - to modify a student Name\n" +
+          "Enter 3 - to modify a student Mark\n" +
+          "Enter 4 - to remove a Student\n" +
+          "Enter 0 - to exit\n")
+    choice = int(get_non_empty_input("Enter a selection: \n"))
+
+    while choice != 0:
+        if choice == 1:
+            new_student_name = get_non_empty_input("Enter New Student Name: \n")
+            id = get_non_empty_input("Enter Student ID: \n")
+            marks = get_non_empty_input("Enter Student Marks: \n")
+            grade = calculate_letter_grade(float(marks))
+
+            dictionary_file[id] = {}
+            dictionary_file[id]["Student Name"] = new_student_name
+            dictionary_file[id]["Final Marks"] = marks
+            dictionary_file[id]["Final Grade"] = grade
+            write_from_dictionary_to_file(dictionary_file,file_to_update)
+
+        elif choice == 2:
+            key_id = get_non_empty_input("Enter the Student ID: \n")
+            if key_id in dictionary_file:
+                dictionary_file[key_id]["Student Name"] = get_non_empty_input("Enter the new student name: \n")
+                write_from_dictionary_to_file(dictionary_file, file_to_update)
+
+        elif choice == 3:
+            key_id = get_non_empty_input("Enter the Student ID: \n")
+            if key_id in dictionary_file:
+                dictionary_file[key_id]["Final Marks"] = get_non_empty_input("Enter the new marks: \n")
+                write_from_dictionary_to_file(dictionary_file, file_to_update)
+
+        elif choice == 4:
+            key_id = get_non_empty_input("Enter the Student ID: \n")
+            remove_a_student(file_to_update, key_id)
+
 
 # Item 3
 def remove_a_student(remove_from_file, remove_id):
-    return "Need to Complete"
+    dictionary_file = load_csv_file_to_dictionary(remove_from_file)
+
+    if remove_id in dictionary_file:
+        key_id = dictionary_file[remove_id]
+        name = dictionary_file[remove_id]["Student Name"]
+        del dictionary_file[remove_id]
+        write_from_dictionary_to_file(dictionary_file, remove_from_file)
+        print("Student: " + key_id + ", " + name + " is removed from file: "+ remove_from_file)
+    else:
+        print("Id " + remove_id + "not found.")
+
 
 
 # Item 4
 def search_student(search_in_file, student_lookup):
-    return "Need to Complete"
-
+    pass
 
 # Item 5
 def file_summary(file_to_summarize):
-    return "Need to Complete"
-
+    pass
 
 # Item 6
 def print_all(file_to_print):
-    return "Need to Complete"
+    pass
 
 
 #  Item 9
@@ -151,10 +257,10 @@ def student_data_manager(user_input):
 
     else:
         print("Invalid entry.")
-
     return 3  # valid selection and entry = 1 to 6
 
 
+#  Item 10
 
 def main():
     """ This is the main function(). It prints out the main MENU of the database app,
