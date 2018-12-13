@@ -11,11 +11,11 @@ def get_non_empty_input(question):
     the user to enter a non empty data """
 
     value = input(question)
-    value = value.trim()
+    value = value.strip()
     while value == "":
         print("No value entered. Please enter a value.")
         value = input(question)
-        value = value.trim()
+        value = value.strip()
     return value
 
 
