@@ -1,10 +1,8 @@
-
 #  Item 7
 def calculate_letter_grade(marks):
     """
         This function calculates  and returns the letter
         grade following the rules below:
-
         >=85% - A
         >=75% and <85% - B
         >=65% and <75% - C

@@ -1,9 +1,7 @@
-# Item 12
-
-def load_csv_file_to_dictionary(fname):
+#  Item 12
+def load_csv_file_to_dictionary(f_name):
     student_id_data = {}
-
-    f = open(fname, "r")
+    f = open(f_name, "r")
     lines = f.readlines()
     f.close()
     data_lines = lines[1:]
@@ -19,6 +17,4 @@ def load_csv_file_to_dictionary(fname):
         student_id_data[student_id]["Student Name"] = student_names
         student_id_data[student_id]["Final Marks"] = final_marks
         student_id_data[student_id]["Final Grade"] = final_grade
-
-
     return student_id_data

@@ -1,12 +1,10 @@
 #  Item 10
-
 def main():
     """ This is the main function(). It prints out the main MENU of the database app,
         prompts the users for a menu selection and reads and passes the user entry to
         the student_data_manager function for processing the menu selection.
     """
     while True:
-
         print("\n")
         print("***************************************************************************")
         print("*    Selection        M    E    N    U                                    *")
@@ -23,3 +21,6 @@ def main():
         read_entry = input("Enter a selection from the menu (Or 0 to quit): ")
         if student_data_manager(read_entry) == 2:
             break
+
+
+main()
