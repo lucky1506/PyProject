@@ -25,44 +25,20 @@ def get_non_empty_input(question):
 
 
 #  Item 13
-def write_from_dictionary_to_file(d, filename):
+def write_from_dictionary_to_file(d_file, filename):
     """ This function writes comma separated values from dictionary to file"""
 
     # open the file in write mode
-    f = open(filename, "r+")
+    f = open(filename, "w")
 
-  
+    f.write("Student Name,ID,Marks,Grade\n")
 
-    for key, val in d.items():
-        keys = val.keys()
-        keys = list(keys)
-        print(keys)
-        student_name = keys[0]
-        print(student_name)
-        final_marks = keys[1]
-        print(final_marks)
-        final_grade = keys[2]
-        print(final_grade)
-        f.write(student_name + " ," + "student id" + " ," + final_marks + " ," + final_grade + " ," + "\n")
-
-        for k, v in val.items():
-            # student_name = k[0]
-            # print(student_name)
-            # final_marks = k[1]
-            # print(final_marks)
-            # final_grade = k[2]
-            # print(final_grade)
-            print("******")
-            # print(k + ",")
-            print(k + " ," + str(v) + " ," + key + ",")
-            f.write(str(v) + " ," + key + " ," + "\n")
-
-    # # if the id (key) exists in the dictionary, write the key and values in the file
-    # for key in d:
-    #     value_list = d[key]
-    #     f.write(key + "," + value_list[0] + "," + value_list[1] + "," + value_list[2] + "\n")
+    # if the id (key) exists in the dictionary, write the key and values in the file
+    for key in d_file:
+        value = d_file[key]
+        f.write(value["Student Name"] + "," + key + "," + str(value["Final Marks"]) + "," + value["Final Grade"] + "\n")
     f.close()
-# 
+
 
 
 #  Item 12
@@ -76,9 +52,11 @@ def load_csv_file_to_dictionary(fname):
     f.close()
     data_lines = lines[1:]
 
+
     for line in data_lines:
         line = line.strip()
         words = line.split(",")
+        print(words)
         student_names = words[0]
         student_id = words[1]
         final_marks = float(words[2])
@@ -89,6 +67,7 @@ def load_csv_file_to_dictionary(fname):
         student_id_data[student_id]["Final Grade"] = final_grade
 
     return student_id_data
+
 
 
 #  Item 8
