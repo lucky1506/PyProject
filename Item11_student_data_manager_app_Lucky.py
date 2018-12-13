@@ -1,9 +1,5 @@
 # Item 11 All -- Student Data Manager App (COMBINED)
 
-# Item 4
-def search_student(search_in_file, student_lookup):
-    pass
-
 
 # Item 5
 def file_summary(file_to_summarize):
@@ -103,6 +99,30 @@ def calculate_letter_grade(marks):
         return "A"
 
 
+# Item 4_Search (Lucky)
+
+def search_student(search_file, id_lookup):
+    """
+    This function takes a file name and an id to search
+    a student in the file. First it reads the data from
+    the file in a dictionary in memory. Then it looks for
+    id in in the dictionary. It returns the search result.
+    It allows the user to searc for another student in the
+    same file, or exit to main menu.
+    """
+
+    dictionary_file = load_csv_file_to_dictionary(search_file)
+
+    if id_lookup in dictionary_file:
+        name = dictionary_file[id_lookup]["Student Name"]
+        write_from_dictionary_to_file(dictionary_file, search_file)
+        print("\nStudent Id: " + str(
+            id_lookup) + ", Student Name: " + name + " exists in file name: " + search_file + ".\n")
+
+    else:
+        print("\nStudent Id " + id_lookup + " does not exist.\n")
+
+
 # Item 3
 def remove_a_student(remove_from_file, remove_id):
     dictionary_file = load_csv_file_to_dictionary(remove_from_file)
@@ -111,20 +131,26 @@ def remove_a_student(remove_from_file, remove_id):
         name = dictionary_file[remove_id]["Student Name"]
         del dictionary_file[remove_id]
         write_from_dictionary_to_file(dictionary_file, remove_from_file)
-        print("Student: " + str(remove_id) + ", " + name + " is removed from file: " + remove_from_file)
+        print("\nStudent: " + str(remove_id) + ", " + name + " is removed from file: " + remove_from_file + ".\n")
     else:
-        print("Id " + remove_id + "not found.")
+        print("\nId " + remove_id + "not found.\n")
 
 
 # Item 2
 def update_file(file_to_update):
+    """ This function allows users to add a new student to an existing file,
+        or update an existing student name, or update an existing student
+        final marks, or to remove an existing student from a file.
+    """
+
     dictionary_file = load_csv_file_to_dictionary(file_to_update)
-    print("Enter 1 - to add a New Student\n" +
+
+    print("\nEnter 1 - to add a New Student\n" +
           "Enter 2 - to modify a student Name\n" +
           "Enter 3 - to modify a student Mark\n" +
           "Enter 4 - to remove a Student\n" +
           "Enter 0 - to exit\n")
-    choice = input("Enter a selection: \n")
+    choice = input("\nEnter a selection: \n")
 
     # check if entry is a digit only. if not digit, return 1 to prompt invalid selection
     if is_all_digit(choice) == False:
@@ -153,28 +179,28 @@ def update_file(file_to_update):
 
                 write_from_dictionary_to_file(dictionary_file, file_to_update)
 
-                print("You added: Student Name: " + new_student_name + ", Student ID: " + id +
+                print("\nYou added: Student Name: " + new_student_name + ", Student ID: " + id +
                       ", Student Marks: " + marks + ", Letter Grade: " + grade + "\n")
-                entry = input("Do you want to add another student? (enter: Y or N ): ")
+                entry = input("\nDo you want to add another student? (enter: Y or N ): ")
 
                 if entry not in "Yy":
-                    print("Invalid response. Try again.")
+                    print("\nGood bye.\n")
                     break
 
         elif choice == 2:
-            key_id = get_non_empty_input("Enter the Student ID: \n")
+            key_id = get_non_empty_input("\nEnter the Student ID: \n")
             if key_id in dictionary_file:
-                dictionary_file[key_id]["Student Name"] = get_non_empty_input("Enter the new student name: \n")
+                dictionary_file[key_id]["Student Name"] = get_non_empty_input("\nEnter the new student name: \n")
                 write_from_dictionary_to_file(dictionary_file, file_to_update)
 
         elif choice == 3:
-            key_id = get_non_empty_input("Enter the Student ID: \n")
+            key_id = get_non_empty_input("\nEnter the Student ID: \n")
             if key_id in dictionary_file:
-                dictionary_file[key_id]["Final Marks"] = get_non_empty_input("Enter the new marks: \n")
+                dictionary_file[key_id]["Final Marks"] = get_non_empty_input("\nEnter the new marks: \n")
                 write_from_dictionary_to_file(dictionary_file, file_to_update)
 
         elif choice == 4:
-            key_id = get_non_empty_input("Enter the Student ID: \n")
+            key_id = get_non_empty_input("\nEnter the Student ID: \n")
             remove_a_student(file_to_update, key_id)
 
 
