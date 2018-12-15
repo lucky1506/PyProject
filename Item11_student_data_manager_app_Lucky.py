@@ -159,7 +159,7 @@ def update_file(file_to_update):
 
         # check if entry is a digit only. if not digit, return 1 to print invalid selection
         if is_all_digit(choice) == False:
-            print("Invalid selection.\n")
+            print("Invalid selection. Select a number from the menu..\n")
             continue
 
         # if entry is any of these digits 0,1,2,3,4
@@ -218,19 +218,8 @@ def update_file(file_to_update):
 
             # if input is one of the selections
             break
-
         else:
-            print("Invalid selection. Try again.")
-
-
-
-
-
-
-
-
-
-
+            print("Invalid selection. Select a number from the menu.")
 
 #  Item 1
 def create_new_file(file_name):
@@ -248,14 +237,9 @@ def create_new_file(file_name):
     entry = int(input("Do you want to enter data? (enter: 1 for Yes, 0 to Exit): \n"))
 
     while entry != 0:
-
-
         student_name = input("Enter Student Name (or press enter to cancel): \n")
         if student_name == "":
             break
-
-        #student_name = input("Enter Student Name: \n")
-
         id = input("Enter Student ID (or press enter to cancel): \n")
         if id == "":
             break
@@ -263,7 +247,6 @@ def create_new_file(file_name):
         if marks == "":
             break
         grade = calculate_letter_grade(float(marks))
-
         new_file.write(student_name + "," + id + "," + marks + "," + grade + "\n")
         print("You entered: Student Name: " + student_name + ", Student ID: " + id +
               ", Student Marks: " + marks + ", Letter Grade: " + grade + "\n")
@@ -277,7 +260,6 @@ def student_data_manager(user_input):
         1) for input is only a digit
         2) if digit, it checks if inputs are valid menu selections: only 0 - 6
         3) if not valid, prompts for correct entry
-
         Returns 1 : if input is not digit (invalid case)
         Returns 2:  if input is 0 (selection to quit program)
         Returns 3:  if input is any digit from 1 to 6 (valid menu selection)
@@ -285,7 +267,7 @@ def student_data_manager(user_input):
     #  return 1
     # check for entry is a digit only. if not digit, return 1 to prompt invalid selection
     if is_all_digit(user_input) == False:
-        print("\nInvalid selection. Selcet a number from the menu.\n")
+        print("Invalid selection. Select a number from the menu.\n")
         return 1
 
     #  return 2 if entry is any of these digits 0,1,2,3,4,5,6
@@ -340,11 +322,9 @@ def student_data_manager(user_input):
 
     # if entry is none of these digits 0,1,2,3,4,5,6
     else:
-        print("Invalid entry. Select a number from the Menu or enter 0 to quit.")
-
+        print("Invalid selection. Select a number from the menu.")
     #  return 3 for entry being valid: 0-6
     return 3  # valid selection and entry = 1 to 6
-
 
 #  Item 10
 def main():
