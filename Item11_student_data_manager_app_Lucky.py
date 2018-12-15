@@ -144,64 +144,83 @@ def update_file(file_to_update):
     """
 
     dictionary_file = load_csv_file_to_dictionary(file_to_update)
+    while True:
+        print("\n****************************************")
+        print("Enter 1 - to add a New Student\n" +
+              "Enter 2 - to modify a student Name\n" +
+              "Enter 3 - to modify a student Mark\n" +
+              "Enter 4 - to remove a Student\n" +
+              "Enter 0 - to return to Main Menu")
+        print("****************************************")
+        choice = input("Enter a selection: \n")
 
-    print("\nEnter 1 - to add a New Student\n" +
-          "Enter 2 - to modify a student Name\n" +
-          "Enter 3 - to modify a student Mark\n" +
-          "Enter 4 - to remove a Student\n" +
-          "Enter 0 - to exit\n")
-    choice = input("\nEnter a selection: \n")
+        # check if entry is a digit only. if not digit, return 1 to prompt invalid selection
+        if is_all_digit(choice) == False:
+            print("Invalid selection.\n")
+            continue
 
-    # check if entry is a digit only. if not digit, return 1 to prompt invalid selection
-    if is_all_digit(choice) == False:
-        print("\nInvalid selection.\n")
-        return 1
 
-    choice = int(choice)
-    # check if entry is any of these digits 0,1,2,3,4
-    if choice in [0, 1, 2, 3, 4]:
-        if choice == 0:
-            print("\nYou selected 0 to quit. Goodbye!")
-            return 2
 
-        elif choice == 1:
+        # if entry is any of these digits 0,1,2,3,4
+        if choice in ["0", "1", "2", "3", "4"]:
+            choice = int(choice)
 
-            while True:
-                new_student_name = get_non_empty_input("Enter New Student Name: \n")
-                id = get_non_empty_input("Enter Student ID: \n")
-                marks = get_non_empty_input("Enter Student Marks: \n")
-                grade = calculate_letter_grade(float(marks))
+            #  Return to main menu if 0
+            if choice == 0:
+                print("You entered 0 to return to the main Menu!")
+                return 2
+            elif choice == 1:
+                while True:
+                    new_student_name = get_non_empty_input("Enter New Student Name: \n")
+                    id = get_non_empty_input("Enter Student ID: \n")
+                    marks = get_non_empty_input("Enter Student Marks: \n")
+                    grade = calculate_letter_grade(float(marks))
 
-                dictionary_file[id] = {}
-                dictionary_file[id]["Student Name"] = new_student_name
-                dictionary_file[id]["Final Marks"] = marks
-                dictionary_file[id]["Final Grade"] = grade
+                    dictionary_file[id] = {}
+                    dictionary_file[id]["Student Name"] = new_student_name
+                    dictionary_file[id]["Final Marks"] = marks
+                    dictionary_file[id]["Final Grade"] = grade
 
-                write_from_dictionary_to_file(dictionary_file, file_to_update)
+                    write_from_dictionary_to_file(dictionary_file, file_to_update)
 
-                print("\nYou added: Student Name: " + new_student_name + ", Student ID: " + id +
-                      ", Student Marks: " + marks + ", Letter Grade: " + grade + "\n")
-                entry = input("\nDo you want to add another student? (enter: Y or N ): ")
+                    print("\nYou added: Student Name: " + new_student_name + ", Student ID: " + id +
+                          ", Student Marks: " + marks + ", Letter Grade: " + grade + "\n")
+                    entry = input("\nDo you want to add another student? (enter: Y or N ): ")
 
-                if entry not in "Yy":
-                    print("\nGood bye.\n")
-                    break
+                    if entry not in "Yy":
+                        print("Invalid response. Try again.\n")
+                        break
 
-        elif choice == 2:
-            key_id = get_non_empty_input("\nEnter the Student ID: \n")
-            if key_id in dictionary_file:
-                dictionary_file[key_id]["Student Name"] = get_non_empty_input("\nEnter the new student name: \n")
-                write_from_dictionary_to_file(dictionary_file, file_to_update)
+            elif choice == 2:
+                key_id = get_non_empty_input("Enter the Student ID: \n")
+                if key_id in dictionary_file:
+                    dictionary_file[key_id]["Student Name"] = get_non_empty_input("\nEnter the new student name: \n")
+                    write_from_dictionary_to_file(dictionary_file, file_to_update)
 
-        elif choice == 3:
-            key_id = get_non_empty_input("\nEnter the Student ID: \n")
-            if key_id in dictionary_file:
-                dictionary_file[key_id]["Final Marks"] = get_non_empty_input("\nEnter the new marks: \n")
-                write_from_dictionary_to_file(dictionary_file, file_to_update)
+            elif choice == 3:
+                key_id = get_non_empty_input("\nEnter the Student ID: \n")
+                if key_id in dictionary_file:
+                    dictionary_file[key_id]["Final Marks"] = get_non_empty_input("\nEnter the new marks: \n")
+                    write_from_dictionary_to_file(dictionary_file, file_to_update)
 
-        elif choice == 4:
-            key_id = get_non_empty_input("\nEnter the Student ID: \n")
-            remove_a_student(file_to_update, key_id)
+            elif choice == 4:
+                key_id = get_non_empty_input("\nEnter the Student ID: \n")
+                remove_a_student(file_to_update, key_id)
+
+            # if input is one of the selections
+            break
+
+        else:
+            print("Invalid selection. Try again.")
+
+
+
+
+
+
+
+
+
 
 
 #  Item 1
@@ -242,7 +261,7 @@ def student_data_manager(user_input):
         Returns 2:  if input is 0 (selection to quit program)
         Returns 3:  if input is any digit from 1 to 6 (valid menu selection)
     """
-
+    #  return 1
     # check for entry is a digit only. if not digit, return 1 to prompt invalid selection
     if is_all_digit(user_input) == False:
         print("\nInvalid selection.\n")
@@ -251,6 +270,7 @@ def student_data_manager(user_input):
     # convert the user_input to int since the input function reads input as string
     user_input = int(user_input)
 
+    #  return 2
     # check if entry is any of these digits 0,1,2,3,4,5,6
     if user_input in [0, 1, 2, 3, 4, 5, 6]:
 
@@ -301,8 +321,9 @@ def student_data_manager(user_input):
 
     # if entry is none of these digits 0,1,2,3,4,5,6
     else:
-        print("Invalid entry.")
-    # otherwise entry is 0-6, return 3
+        print("Invalid entry. Try again or enter 0 to quit.")
+
+    #  return 3 for entry being valid: 0-6
     return 3  # valid selection and entry = 1 to 6
 
 
