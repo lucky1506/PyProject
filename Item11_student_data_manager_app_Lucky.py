@@ -13,8 +13,10 @@ def print_all(file_to_print):
 
 #  Item 14
 def get_non_empty_input(question):
+
     """ This function checks for non empty input and prompts
     the user to enter a data """
+
     value = input(question)
     value = value.strip()
     while value == "":
@@ -26,13 +28,14 @@ def get_non_empty_input(question):
 
 #  Item 13
 def write_from_dictionary_to_file(d_file, filename):
+
     """ This method writes comma separated values from dictionary to file"""
 
-    # open the file in write mode
+    # open file in write mode
     f = open(filename, "w")
     f.write("Student Name,ID,Marks,Grade\n")
 
-    # if the id (key) exists in the dictionary, write the key and values in the file
+    # if id (key) exists in dictionary, write the key and values in file
     for key in d_file:
         value = d_file[key]
         f.write(value["Student Name"] + "," + key + "," + str(value["Final Marks"]) + "," + value["Final Grade"] + "\n")
@@ -154,12 +157,10 @@ def update_file(file_to_update):
         print("****************************************")
         choice = input("Enter a selection: \n")
 
-        # check if entry is a digit only. if not digit, return 1 to prompt invalid selection
+        # check if entry is a digit only. if not digit, return 1 to print invalid selection
         if is_all_digit(choice) == False:
             print("Invalid selection.\n")
             continue
-
-
 
         # if entry is any of these digits 0,1,2,3,4
         if choice in ["0", "1", "2", "3", "4"]:
@@ -188,20 +189,28 @@ def update_file(file_to_update):
                     entry = input("\nDo you want to add another student? (enter: Y or N ): ")
 
                     if entry not in "Yy":
-                        print("Invalid response. Try again.\n")
                         break
 
             elif choice == 2:
-                key_id = get_non_empty_input("Enter the Student ID: \n")
+                key_id = get_non_empty_input("Enter Student ID: \n")
                 if key_id in dictionary_file:
                     dictionary_file[key_id]["Student Name"] = get_non_empty_input("\nEnter the new student name: \n")
                     write_from_dictionary_to_file(dictionary_file, file_to_update)
+                else:
+                    print("ID does not exist.")
+
 
             elif choice == 3:
-                key_id = get_non_empty_input("\nEnter the Student ID: \n")
+                key_id = get_non_empty_input("\nEnter Student ID: \n")
                 if key_id in dictionary_file:
-                    dictionary_file[key_id]["Final Marks"] = get_non_empty_input("\nEnter the new marks: \n")
+                    new_marks = get_non_empty_input("\nEnter the new marks: \n")
+                    new_grade = calculate_letter_grade(float(new_marks))
+                    dictionary_file[key_id]["Final Marks"] = new_marks
+                    dictionary_file[key_id]["Final Grade"] = new_grade
                     write_from_dictionary_to_file(dictionary_file, file_to_update)
+
+                else:
+                    print("ID does not exist.")
 
             elif choice == 4:
                 key_id = get_non_empty_input("\nEnter the Student ID: \n")
@@ -239,10 +248,22 @@ def create_new_file(file_name):
     entry = int(input("Do you want to enter data? (enter: 1 for Yes, 0 to Exit): \n"))
 
     while entry != 0:
-        student_name = input("Enter Student Name: \n")
-        id = input("Enter Student ID: \n")
-        marks = input("Enter Student Marks: \n")
+
+
+        student_name = input("Enter Student Name (or press enter to cancel): \n")
+        if student_name == "":
+            break
+
+        #student_name = input("Enter Student Name: \n")
+
+        id = input("Enter Student ID (or press enter to cancel): \n")
+        if id == "":
+            break
+        marks = input("Enter Student Marks (or press enter to cancel): \n")
+        if marks == "":
+            break
         grade = calculate_letter_grade(float(marks))
+
         new_file.write(student_name + "," + id + "," + marks + "," + grade + "\n")
         print("You entered: Student Name: " + student_name + ", Student ID: " + id +
               ", Student Marks: " + marks + ", Letter Grade: " + grade + "\n")
@@ -264,15 +285,14 @@ def student_data_manager(user_input):
     #  return 1
     # check for entry is a digit only. if not digit, return 1 to prompt invalid selection
     if is_all_digit(user_input) == False:
-        print("\nInvalid selection.\n")
+        print("\nInvalid selection. Selcet a number from the menu.\n")
         return 1
 
-    # convert the user_input to int since the input function reads input as string
-    user_input = int(user_input)
+    #  return 2 if entry is any of these digits 0,1,2,3,4,5,6
+    if user_input in ["0", "1", "2", "3", "4", "5", "6"]:
 
-    #  return 2
-    # check if entry is any of these digits 0,1,2,3,4,5,6
-    if user_input in [0, 1, 2, 3, 4, 5, 6]:
+        # convert the user_input to int since the input function reads input as string
+        user_input = int(user_input)
 
         # if entry is 0, return 2 to exit program
         if user_input == 0:
@@ -283,7 +303,6 @@ def student_data_manager(user_input):
         elif user_input == 1:
             new_file_name = input("Name your new file: ")
             create_new_file(new_file_name)
-
 
         #  if entry is 2: Update an existing File
         elif user_input == 2:
@@ -321,7 +340,7 @@ def student_data_manager(user_input):
 
     # if entry is none of these digits 0,1,2,3,4,5,6
     else:
-        print("Invalid entry. Try again or enter 0 to quit.")
+        print("Invalid entry. Select a number from the Menu or enter 0 to quit.")
 
     #  return 3 for entry being valid: 0-6
     return 3  # valid selection and entry = 1 to 6
