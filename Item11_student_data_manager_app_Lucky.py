@@ -146,8 +146,11 @@ def update_file(file_to_update):
         final marks, or to remove an existing student from a file.
     """
 
-    dictionary_file = load_csv_file_to_dictionary(file_to_update)
+    dictionary_d = load_csv_file_to_dictionary(file_to_update)
+
+
     while True:
+
         print("\n****************************************")
         print("Enter 1 - to add a New Student\n" +
               "Enter 2 - to modify a student Name\n" +
@@ -170,44 +173,52 @@ def update_file(file_to_update):
             if choice == 0:
                 print("You entered 0 to return to the main Menu!")
                 return 2
+
+            # add a new student
             elif choice == 1:
                 while True:
-                    new_student_name = get_non_empty_input("Enter New Student Name: \n")
                     id = get_non_empty_input("Enter Student ID: \n")
+                    if id in dictionary_d:
+                        print("That ID already exists in this file.\n")
+                        continue
+
+
+
+                    new_student_name = get_non_empty_input("Enter New Student Name: \n")
                     marks = get_non_empty_input("Enter Student Marks: \n")
                     grade = calculate_letter_grade(float(marks))
 
-                    dictionary_file[id] = {}
-                    dictionary_file[id]["Student Name"] = new_student_name
-                    dictionary_file[id]["Final Marks"] = marks
-                    dictionary_file[id]["Final Grade"] = grade
+                    dictionary_d[id] = {}
+                    dictionary_d[id]["Student Name"] = new_student_name
+                    dictionary_d[id]["Final Marks"] = marks
+                    dictionary_d[id]["Final Grade"] = grade
 
-                    write_from_dictionary_to_file(dictionary_file, file_to_update)
+                    write_from_dictionary_to_file(dictionary_d, file_to_update)
 
                     print("\nYou added: Student Name: " + new_student_name + ", Student ID: " + id +
                           ", Student Marks: " + marks + ", Letter Grade: " + grade + "\n")
-                    entry = input("\nDo you want to add another student? (enter: Y or N ): ")
+                    entry = input("\nDo you want to add another student? (enter: Y or N): ")
 
                     if entry not in "Yy":
                         break
 
             elif choice == 2:
                 key_id = get_non_empty_input("Enter Student ID: \n")
-                if key_id in dictionary_file:
-                    dictionary_file[key_id]["Student Name"] = get_non_empty_input("\nEnter the new student name: \n")
-                    write_from_dictionary_to_file(dictionary_file, file_to_update)
+                if key_id in dictionary_d:
+                    dictionary_d[key_id]["Student Name"] = get_non_empty_input("\nEnter the new student name: \n")
+                    write_from_dictionary_to_file(dictionary_d, file_to_update)
                 else:
                     print("ID does not exist.")
 
 
             elif choice == 3:
                 key_id = get_non_empty_input("\nEnter Student ID: \n")
-                if key_id in dictionary_file:
+                if key_id in dictionary_d:
                     new_marks = get_non_empty_input("\nEnter the new marks: \n")
                     new_grade = calculate_letter_grade(float(new_marks))
-                    dictionary_file[key_id]["Final Marks"] = new_marks
-                    dictionary_file[key_id]["Final Grade"] = new_grade
-                    write_from_dictionary_to_file(dictionary_file, file_to_update)
+                    dictionary_d[key_id]["Final Marks"] = new_marks
+                    dictionary_d[key_id]["Final Grade"] = new_grade
+                    write_from_dictionary_to_file(dictionary_d, file_to_update)
 
                 else:
                     print("ID does not exist.")
@@ -237,15 +248,15 @@ def create_new_file(file_name):
     entry = int(input("Do you want to enter data? (enter: 1 for Yes, 0 to Exit): \n"))
 
     while entry != 0:
-        student_name = input("Enter Student Name (or press enter to cancel): \n")
-        if student_name == "":
-            break
+
+        #  Users are allowed to exit only at the beginning of the data entry phase.
+        #  After an ID is entered, they must continue. The entries can be updated after they are done.
         id = input("Enter Student ID (or press enter to cancel): \n")
         if id == "":
             break
-        marks = input("Enter Student Marks (or press enter to cancel): \n")
-        if marks == "":
-            break
+
+        student_name = input("Enter Student Name: \n")
+        marks = input("Enter Student Marks: \n")
         grade = calculate_letter_grade(float(marks))
         new_file.write(student_name + "," + id + "," + marks + "," + grade + "\n")
         print("You entered: Student Name: " + student_name + ", Student ID: " + id +
@@ -292,6 +303,8 @@ def student_data_manager(user_input):
             if file_to_update != "":
                 update_file(file_to_update)
 
+
+
         #  if entry is 3: Remove a Student from a file
         elif user_input == 3:
             remove_from_file = input("Enter the file name to remove a student from (or press enter to cancel): ")
@@ -299,6 +312,9 @@ def student_data_manager(user_input):
                 remove_id = input("Enter Student ID you wish to remove (or press enter to cancel): ")
                 if remove_id != "":
                     remove_a_student(remove_from_file, remove_id)
+
+
+
 
         #  if entry is 4: Search a Student in a file
         elif user_input == 4:
@@ -308,11 +324,14 @@ def student_data_manager(user_input):
                 if student_lookup != "":
                     search_student(search_in_file, student_lookup)
 
+
         #  if entry is 5: Print Summary of students, Average Marks, number of As Bs etc from a file
         elif user_input == 5:
             file_to_summarize = input("Enter file name to print summary(or press enter to cancel): ")
             if file_to_summarize != "":
                 file_summary(file_to_summarize)
+
+
 
         # if entry is 6: print max 20 lines of student data at a time (row by row) per page
         elif user_input == 6:
@@ -341,7 +360,7 @@ def main():
               "*        2      -     Update an existing student data file                *\n" +
               "*        3      -     Remove a student                                    *\n" +
               "*        4      -     Search a student                                    *\n" +
-              "*        5      -     Print only a summery of student data                *\n" +
+              "*        5      -     Print only a summary of student data                *\n" +
               "*        6      -     Print the entire student data file to command line  *\n" +
               "*        0      -     Quit                                                *\n" +
               "***************************************************************************\n")
