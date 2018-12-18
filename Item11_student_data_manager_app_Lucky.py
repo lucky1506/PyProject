@@ -10,7 +10,7 @@ def print_all(file_to_print):
     pass
 
 
-
+# Item 5
 def print_only_summary_of_student_data(fname):
     """ This function prints a summary of a student data file """
 
