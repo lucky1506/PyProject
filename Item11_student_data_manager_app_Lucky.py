@@ -1,9 +1,8 @@
+import os
+import statistics
+
+
 # Item 11 All -- Student Data Manager App (COMBINED)
-
-
-# Item 5
-def file_summary(file_to_summarize):
-    pass
 
 
 # Item 6
@@ -11,9 +10,73 @@ def print_all(file_to_print):
     pass
 
 
+
+def print_only_summary_of_student_data(fname):
+    """ This function prints a summary of a student data file """
+
+    student_dic = load_csv_file_to_dictionary(fname)
+    the_number_of_students = len(student_dic.keys())
+    print("The number of students:", the_number_of_students)
+    final_marks_list = []
+    final_grade_list = []
+
+    for key, value in student_dic.items():
+        for k, v in value.items():
+            if k == "Final Marks":
+                final_marks_list.append(v)
+            elif k == "Final Grade":
+                final_grade_list.append(v)
+    final_marks_sum = sum(final_marks_list)
+
+    average_total_marks = final_marks_sum / the_number_of_students
+    print("The average total marks:", average_total_marks)
+
+    copy_of_final_marks_list = final_marks_list[:]
+    copy_of_final_marks_list.sort()
+
+    if (len(final_marks_list) % 2 == 0):
+        print("The median total marks:", (
+                copy_of_final_marks_list[(len(final_marks_list) - 1) // 2] + copy_of_final_marks_list[
+            len(final_marks_list) // 2]) / 2)
+
+    else:
+        print("The median total marks:", copy_of_final_marks_list[len(final_marks_list) // 2])
+
+    print("The standard deviation of the total marks:", statistics.stdev(final_marks_list))
+
+    print("Highest marks:", max(copy_of_final_marks_list))
+    print("Minimum marks:", min(copy_of_final_marks_list))
+    print("Number of 'A's:", final_grade_list.count("A"))
+    print("Number of 'B's:", final_grade_list.count("B"))
+    print("Number of 'C's:", final_grade_list.count("C"))
+    print("Number of 'D's:", final_grade_list.count("D"))
+    print("Number of 'F's:", final_grade_list.count('F'))
+
+
+#  Item 15
+def does_file_exist(file_name):
+    """
+    This function takes in a file name or a path. It
+    uses the python built-in os library functions to check
+    if the file path exists and also that the path points to a
+    file and not to a directory. These functions eliminates
+    the need for catching exception.
+    """
+
+    while True:
+        if file_name != "":
+            if os.path.exists(file_name) and os.path.isfile(file_name):
+                return file_name
+            else:
+                file_name = input(
+                    "\nThat file does not exist.\n\nEnter an existing file name (or press enter to cancel): ")
+        else:
+            print("\nYou exit to the main menu.")
+            return None
+
+
 #  Item 14
 def get_non_empty_input(question):
-
     """ This function checks for non empty input and prompts
     the user to enter a data """
 
@@ -28,14 +91,13 @@ def get_non_empty_input(question):
 
 #  Item 13
 def write_from_dictionary_to_file(d_file, filename):
-
     """ This method writes comma separated values from dictionary to file"""
 
-    # open file in write mode
+    # open file in write mode and write the header
     f = open(filename, "w")
     f.write("Student Name,ID,Marks,Grade\n")
 
-    # if id (key) exists in dictionary, write the key and values in file
+    # if id (key) exists in dictionary, write key and values to file
     for key in d_file:
         value = d_file[key]
         f.write(value["Student Name"] + "," + key + "," + str(value["Final Marks"]) + "," + value["Final Grade"] + "\n")
@@ -44,6 +106,11 @@ def write_from_dictionary_to_file(d_file, filename):
 
 #  Item 12
 def load_csv_file_to_dictionary(f_name):
+    """
+    This function opens a csv file and stores data from the
+    file into a dictionary in memory using student ID as the key.
+    """
+
     student_id_data = {}
     f = open(f_name, "r")
     lines = f.readlines()
@@ -103,7 +170,6 @@ def calculate_letter_grade(marks):
 
 
 # Item 4_Search (Lucky)
-
 def search_student(search_file, id_lookup):
     """
     This function takes a file name and an id to search
@@ -121,13 +187,18 @@ def search_student(search_file, id_lookup):
         write_from_dictionary_to_file(dictionary_file, search_file)
         print("\nStudent Id: " + str(
             id_lookup) + ", Student Name: " + name + " exists in file name: " + search_file + ".\n")
-
     else:
         print("\nStudent Id " + id_lookup + " does not exist.\n")
 
 
 # Item 3
 def remove_a_student(remove_from_file, remove_id):
+    """
+    This function takes an ID and a file name and removes the
+    student data by that id from the given file. It prints
+    the removed student's name and ID after removing.
+    """
+
     dictionary_file = load_csv_file_to_dictionary(remove_from_file)
 
     if remove_id in dictionary_file:
@@ -140,17 +211,14 @@ def remove_a_student(remove_from_file, remove_id):
 
 
 # Item 2
-def update_file(file_to_update):
+def update_file(f_csv):
     """ This function allows users to add a new student to an existing file,
         or update an existing student name, or update an existing student
         final marks, or to remove an existing student from a file.
     """
 
-    dictionary_d = load_csv_file_to_dictionary(file_to_update)
-
-
+    dictionary_d = load_csv_file_to_dictionary(f_csv)
     while True:
-
         print("\n****************************************")
         print("Enter 1 - to add a New Student\n" +
               "Enter 2 - to modify a student Name\n" +
@@ -160,29 +228,26 @@ def update_file(file_to_update):
         print("****************************************")
         choice = input("Enter a selection: \n")
 
-        # check if entry is a digit only. if not digit, return 1 to print invalid selection
+        # if entry is not digit, return 1 to print invalid selection
         if is_all_digit(choice) == False:
             print("Invalid selection. Select a number from the menu..\n")
             continue
 
-        # if entry is any of these digits 0,1,2,3,4
         if choice in ["0", "1", "2", "3", "4"]:
             choice = int(choice)
 
-            #  Return to main menu if 0
+            #  0 - Return to main menu
             if choice == 0:
                 print("You entered 0 to return to the main Menu!")
                 return 2
 
-            # add a new student
+            # 1 - add a new student
             elif choice == 1:
                 while True:
                     id = get_non_empty_input("Enter Student ID: \n")
                     if id in dictionary_d:
                         print("That ID already exists in this file.\n")
                         continue
-
-
 
                     new_student_name = get_non_empty_input("Enter New Student Name: \n")
                     marks = get_non_empty_input("Enter Student Marks: \n")
@@ -193,7 +258,7 @@ def update_file(file_to_update):
                     dictionary_d[id]["Final Marks"] = marks
                     dictionary_d[id]["Final Grade"] = grade
 
-                    write_from_dictionary_to_file(dictionary_d, file_to_update)
+                    write_from_dictionary_to_file(dictionary_d, f_csv)
 
                     print("\nYou added: Student Name: " + new_student_name + ", Student ID: " + id +
                           ", Student Marks: " + marks + ", Letter Grade: " + grade + "\n")
@@ -206,10 +271,9 @@ def update_file(file_to_update):
                 key_id = get_non_empty_input("Enter Student ID: \n")
                 if key_id in dictionary_d:
                     dictionary_d[key_id]["Student Name"] = get_non_empty_input("\nEnter the new student name: \n")
-                    write_from_dictionary_to_file(dictionary_d, file_to_update)
+                    write_from_dictionary_to_file(dictionary_d, f_csv)
                 else:
                     print("ID does not exist.")
-
 
             elif choice == 3:
                 key_id = get_non_empty_input("\nEnter Student ID: \n")
@@ -218,21 +282,21 @@ def update_file(file_to_update):
                     new_grade = calculate_letter_grade(float(new_marks))
                     dictionary_d[key_id]["Final Marks"] = new_marks
                     dictionary_d[key_id]["Final Grade"] = new_grade
-                    write_from_dictionary_to_file(dictionary_d, file_to_update)
-
+                    write_from_dictionary_to_file(dictionary_d, f_csv)
                 else:
                     print("ID does not exist.")
 
             elif choice == 4:
                 key_id = get_non_empty_input("\nEnter the Student ID: \n")
-                remove_a_student(file_to_update, key_id)
+                remove_a_student(f_csv, key_id)
 
             # if input is one of the selections
             break
         else:
             print("Invalid selection. Select a number from the menu.")
 
-#  Item 1
+
+#  Item 1 - create new csv file
 def create_new_file(file_name):
     """
     This function takes a name for a file and creates a new student data file
@@ -243,7 +307,8 @@ def create_new_file(file_name):
 
     new_file = open(file_name, "w")
     print("\nYou have created a new file named: " + file_name + "\n")
-    # write the 1st row which is the Header in 4 columns
+
+    # write row1: Header
     new_file.write("Student_Name,ID,Marks,Grade\n")
     entry = int(input("Do you want to enter data? (enter: 1 for Yes, 0 to Exit): \n"))
 
@@ -275,75 +340,85 @@ def student_data_manager(user_input):
         Returns 2:  if input is 0 (selection to quit program)
         Returns 3:  if input is any digit from 1 to 6 (valid menu selection)
     """
-    #  return 1
-    # check for entry is a digit only. if not digit, return 1 to prompt invalid selection
+
+    # if selection is not digit (return 1. invalid entry)
     if is_all_digit(user_input) == False:
         print("Invalid selection. Select a number from the menu.\n")
         return 1
 
-    #  return 2 if entry is any of these digits 0,1,2,3,4,5,6
+    #  correct selection "0-6"
     if user_input in ["0", "1", "2", "3", "4", "5", "6"]:
 
         # convert the user_input to int since the input function reads input as string
         user_input = int(user_input)
 
-        # if entry is 0, return 2 to exit program
+        # selection 0, return 2 to exit program
         if user_input == 0:
             print("\nYou selected 0 to quit. Goodbye!")
             return 2
 
-        #  if entry is 1: Create a new file
+
+        #  selection 1: Create a new file
         elif user_input == 1:
             new_file_name = input("Name your new file: ")
             create_new_file(new_file_name)
 
-        #  if entry is 2: Update an existing File
+
+        #  selection 2: Update an existing file
         elif user_input == 2:
             file_to_update = input("Enter the file name to update (or press enter to cancel): ")
-            if file_to_update != "":
-                update_file(file_to_update)
+            valid_file = does_file_exist(file_to_update)
+            if valid_file != None:
+                update_file(valid_file)
 
 
-
-        #  if entry is 3: Remove a Student from a file
+        #  selection 3: Remove a Student
         elif user_input == 3:
             remove_from_file = input("Enter the file name to remove a student from (or press enter to cancel): ")
-            if remove_from_file != "":
+
+            valid_file = does_file_exist(remove_from_file)
+
+            if valid_file != None:
                 remove_id = input("Enter Student ID you wish to remove (or press enter to cancel): ")
                 if remove_id != "":
-                    remove_a_student(remove_from_file, remove_id)
+                    remove_a_student(valid_file, remove_id)
 
 
-
-
-        #  if entry is 4: Search a Student in a file
+        #  selection 4: Search a student
         elif user_input == 4:
-            search_in_file = input("Enter a file name to search for the student (or press enter to cancel): ")
-            if search_in_file != "":
-                student_lookup = input("Enter Student ID you wish to look up (or press enter to cancel): ")
+            search_in_file = input("Enter a file name to search for a student (or press enter to cancel): ")
+
+            valid_file = does_file_exist(search_in_file)
+
+            if valid_file != None:
+                student_lookup = input("Enter Student ID to look up (or press enter to cancel): ")
                 if student_lookup != "":
-                    search_student(search_in_file, student_lookup)
+                    search_student(valid_file, student_lookup)
 
 
-        #  if entry is 5: Print Summary of students, Average Marks, number of As Bs etc from a file
+        #  selection 5: Print Summary of students, Average Marks, number of As Bs etc from a file
         elif user_input == 5:
             file_to_summarize = input("Enter file name to print summary(or press enter to cancel): ")
-            if file_to_summarize != "":
-                file_summary(file_to_summarize)
 
+            valid_file = does_file_exist(file_to_summarize)
+            if valid_file != None:
+                print_only_summary_of_student_data(valid_file)
 
-
-        # if entry is 6: print max 20 lines of student data at a time (row by row) per page
+        # selection 6: print max 20 lines of student data at a time (row by row) per page
         elif user_input == 6:
             file_to_print = input("Enter file name to print 20 student data/page (or press enter to cancel): ")
-            if file_to_print != "":
-                print_all(file_to_print)
+            valid_file = does_file_exist(file_to_print)
+            if valid_file != None:
+                print_all(valid_file)
 
-    # if entry is none of these digits 0,1,2,3,4,5,6
+
+    # invalid main menu selection(not 0,1,2,3,4,5,6)
     else:
         print("Invalid selection. Select a number from the menu.")
-    #  return 3 for entry being valid: 0-6
-    return 3  # valid selection and entry = 1 to 6
+
+    #  return 3 for valid 0-6 selection
+    return 3
+
 
 #  Item 10
 def main():
