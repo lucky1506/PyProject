@@ -5,6 +5,28 @@ import statistics
 # Item 11 All -- Student Data Manager App (COMBINED)
 
 
+#  Item 16
+def filename_check(filename):
+    alpha = "abcdefghijklmnopqrstuvwxyz"
+    numbers = "0123456789"
+    symbols = "_.-"
+    valid_first_character = alpha + alpha.upper()
+    valid_characters = alpha + alpha.upper() + numbers + symbols
+    first_character = filename[0]
+    if first_character not in valid_first_character:
+        print("\nInvalid file name. File must begin with a letter.\n")
+        return False
+    else:
+        for c in filename:
+            if c not in valid_characters:
+                print("\n" + c + " is an invalid character.\n")
+                print("\nFile name must start with a letter followed by any of the following:\n"
+                      "letters, numbers and  .  -  _ \n")
+                return False
+    return True
+
+
+
 # Item 6
 def print_all(file_to_print):
     student_dic = load_csv_file_to_dictionary(file_to_print)
@@ -285,8 +307,15 @@ def update_file(f_csv):
                         continue
 
                     new_student_name = get_non_empty_input("Enter New Student Name: \n")
-                    marks = get_non_empty_input("Enter Student Marks: \n")
-                    grade = calculate_letter_grade(float(marks))
+
+                    while True:
+                        marks = get_non_empty_input("Enter Student Marks: \n")
+                        try:
+                            marks = float(marks)
+                            break
+                        except:
+                            print("Marks must be all numbers or a decimal value.  ")
+                    grade = calculate_letter_grade(marks)
 
                     dictionary_d[id] = {}
                     dictionary_d[id]["Student Name"] = new_student_name
@@ -313,8 +342,16 @@ def update_file(f_csv):
             elif choice == 3:
                 key_id = get_non_empty_input("\nEnter Student ID: \n")
                 if key_id in dictionary_d:
-                    new_marks = get_non_empty_input("\nEnter the new marks: \n")
-                    new_grade = calculate_letter_grade(float(new_marks))
+
+                    while True:
+                        new_marks = get_non_empty_input("Enter the new marks: \n")
+                        try:
+                            new_marks = float(new_marks)
+                            break
+                        except:
+                            print("Marks must be all numbers or a decimal value.  ")
+                    new_grade = calculate_letter_grade(new_marks)
+
                     dictionary_d[key_id]["Final Marks"] = new_marks
                     dictionary_d[key_id]["Final Grade"] = new_grade
                     write_from_dictionary_to_file(dictionary_d, f_csv)
@@ -356,11 +393,20 @@ def create_new_file(file_name):
             break
 
         student_name = input("Enter Student Name: \n")
-        marks = input("Enter Student Marks: \n")
-        grade = calculate_letter_grade(float(marks))
-        new_file.write(student_name + "," + id + "," + marks + "," + grade + "\n")
+
+        while True:
+            marks = input("Enter Student Marks: \n")
+            try:
+                marks = float(marks)
+                break
+            except:
+                print("Marks must be all numbers or a decimal value.  ")
+
+        grade = calculate_letter_grade(marks)
+
+        new_file.write(student_name + "," + id + "," + str(marks) + "," + grade + "\n")
         print("You entered: Student Name: " + student_name + ", Student ID: " + id +
-              ", Student Marks: " + marks + ", Letter Grade: " + grade + "\n")
+              ", Student Marks: " + str(marks) + ", Letter Grade: " + grade + "\n")
         entry = int(input("Do you want to enter another data? (enter: 1 for Yes, 0 to Exit): "))
     new_file.close()
 
@@ -392,11 +438,16 @@ def student_data_manager(user_input):
             print("\nYou selected 0 to quit. Goodbye!")
             return 2
 
-
         #  selection 1: Create a new file
+
         elif user_input == 1:
-            new_file_name = input("Name your new file: ")
-            create_new_file(new_file_name)
+            while True:
+                new_file_name = input("Name your new file (or press enter to cancel): ")
+                if new_file_name != "" and filename_check(new_file_name):
+                    create_new_file(new_file_name)
+                    break
+                elif new_file_name == "":
+                    break
 
 
         #  selection 2: Update an existing file
@@ -405,7 +456,6 @@ def student_data_manager(user_input):
             valid_file = does_file_exist(file_to_update)
             if valid_file != None:
                 update_file(valid_file)
-
 
         #  selection 3: Remove a Student
         elif user_input == 3:
