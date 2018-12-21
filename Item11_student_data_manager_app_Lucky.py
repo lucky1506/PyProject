@@ -2,7 +2,12 @@ import os
 import statistics
 
 
-# Item 11 All -- Student Data Manager App (COMBINED)
+# ****************************************************************************
+# CS 131A-Python Programming-Project  Date: December 21, 2018
+# Team members: Lucky Pataky, Grace Durham, Stephanie Boyette and Katie Jones
+# Fall 2018/City College of SF (ccsf.edu)
+# Professor: Dr. Indika Walimuni
+# ****************************************************************************
 
 
 #  Item 16
@@ -73,6 +78,10 @@ def print_only_summary_of_student_data(fname):
 
     student_dic = load_csv_file_to_dictionary(fname)
     the_number_of_students = len(student_dic.keys())
+
+    print("\n")
+    print("                         FILE SUMMARY                                      ")
+    print("______________________________________________________________________")
     print("The number of students:", the_number_of_students)
     final_marks_list = []
     final_grade_list = []
@@ -100,7 +109,6 @@ def print_only_summary_of_student_data(fname):
         print("The median total marks:", copy_of_final_marks_list[len(final_marks_list) // 2])
 
     print("The standard deviation of the total marks:", statistics.stdev(final_marks_list))
-
     print("Highest marks:", max(copy_of_final_marks_list))
     print("Minimum marks:", min(copy_of_final_marks_list))
     print("Number of 'A's:", final_grade_list.count("A"))
@@ -108,6 +116,7 @@ def print_only_summary_of_student_data(fname):
     print("Number of 'C's:", final_grade_list.count("C"))
     print("Number of 'D's:", final_grade_list.count("D"))
     print("Number of 'F's:", final_grade_list.count('F'))
+    print("______________________________________________________________________")
 
 
 #  Item 15
@@ -226,7 +235,7 @@ def calculate_letter_grade(marks):
         return "A"
 
 
-# Item 4_Search (Lucky)
+# Item 4_Search
 def search_student(search_file, id_lookup):
     """
     This function takes a file name and an id to search
@@ -325,7 +334,7 @@ def update_file(f_csv):
                     write_from_dictionary_to_file(dictionary_d, f_csv)
 
                     print("\nYou added: Student Name: " + new_student_name + ", Student ID: " + id +
-                          ", Student Marks: " + marks + ", Letter Grade: " + grade + "\n")
+                          ", Student Marks: " + str(marks) + ", Letter Grade: " + grade + "\n")
                     entry = input("\nDo you want to add another student? (enter: Y or N): ")
 
                     if entry not in "Yy":
@@ -365,7 +374,7 @@ def update_file(f_csv):
             # if input is one of the selections
             break
         else:
-            print("Invalid selection. Select a number from the menu.")
+            print("\nInvalid selection. Select a number from the menu.")
 
 
 #  Item 1 - create new csv file
@@ -382,9 +391,9 @@ def create_new_file(file_name):
 
     # write row1: Header
     new_file.write("Student_Name,ID,Marks,Grade\n")
-    entry = int(input("Do you want to enter data? (enter: 1 for Yes, 0 to Exit): \n"))
+    entry = input("Do you want to enter data? (enter: 1 for Yes, or enter any key to Exit): \n")
 
-    while entry != 0:
+    while entry == "1":
 
         #  Users are allowed to exit only at the beginning of the data entry phase.
         #  After an ID is entered, they must continue. The entries can be updated after they are done.
@@ -407,9 +416,9 @@ def create_new_file(file_name):
         new_file.write(student_name + "," + id + "," + str(marks) + "," + grade + "\n")
         print("You entered: Student Name: " + student_name + ", Student ID: " + id +
               ", Student Marks: " + str(marks) + ", Letter Grade: " + grade + "\n")
-        entry = int(input("Do you want to enter another data? (enter: 1 for Yes, 0 to Exit): "))
-    new_file.close()
 
+        entry = input("Do you want to enter another data? (enter: 1 for Yes, or enter any key to Exit): ")
+    new_file.close()
 
 #  Item 9
 def student_data_manager(user_input):
@@ -424,7 +433,7 @@ def student_data_manager(user_input):
 
     # if selection is not digit (return 1. invalid entry)
     if is_all_digit(user_input) == False:
-        print("Invalid selection. Select a number from the menu.\n")
+        print("\nInvalid selection. Select a number from the menu.\n")
         return 1
 
     #  correct selection "0-6"
@@ -449,7 +458,6 @@ def student_data_manager(user_input):
                 elif new_file_name == "":
                     break
 
-
         #  selection 2: Update an existing file
         elif user_input == 2:
             file_to_update = input("Enter the file name to update (or press enter to cancel): ")
@@ -468,7 +476,6 @@ def student_data_manager(user_input):
                 if remove_id != "":
                     remove_a_student(valid_file, remove_id)
 
-
         #  selection 4: Search a student
         elif user_input == 4:
             search_in_file = input("Enter a file name to search for a student (or press enter to cancel): ")
@@ -479,7 +486,6 @@ def student_data_manager(user_input):
                 student_lookup = input("Enter Student ID to look up (or press enter to cancel): ")
                 if student_lookup != "":
                     search_student(valid_file, student_lookup)
-
 
         #  selection 5: Print Summary of students, Average Marks, number of As Bs etc from a file
         elif user_input == 5:
@@ -499,7 +505,7 @@ def student_data_manager(user_input):
 
     # invalid main menu selection(not 0,1,2,3,4,5,6)
     else:
-        print("Invalid selection. Select a number from the menu.")
+        print("\nInvalid selection. Select a number from the menu.")
 
     #  return 3 for valid 0-6 selection
     return 3
