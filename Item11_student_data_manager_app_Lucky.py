@@ -37,7 +37,7 @@ def print_all(file_to_print):
     all_keys = student_dic.keys()
     numpages = int(the_number_of_students / 20)
     if the_number_of_students%20 != 0:
-        numpages +=1
+        numpages += 1
 
     print('_' * 70)
     print('')
@@ -271,7 +271,7 @@ def remove_a_student(remove_from_file, remove_id):
         write_from_dictionary_to_file(dictionary_file, remove_from_file)
         print("\nStudent: " + str(remove_id) + ", " + name + " is removed from file: " + remove_from_file + ".\n")
     else:
-        print("\nId " + remove_id + "not found.\n")
+        print("\nId " + remove_id + " not found.\n")
 
 
 # Item 2
@@ -333,9 +333,11 @@ def update_file(f_csv):
 
                     print("\nYou added: Student Name: " + new_student_name + ", Student ID: " + id +
                           ", Student Marks: " + str(marks) + ", Letter Grade: " + grade + "\n")
-                    entry = input("\nDo you want to add another student? (enter: Y or ***N): ")
+                    entry = input("\nDo you want to add another student? (Y for yes or any key to exit): ")
 
-                    if entry not in "Yy":
+                    if entry in "Yy" and entry != "":
+                        continue
+                    else:
                         break
 
             elif choice == 2:
