@@ -30,8 +30,6 @@ def filename_check(filename):
                 return False
     return True
 
-
-
 # Item 6
 def print_all(file_to_print):
     student_dic = load_csv_file_to_dictionary(file_to_print)
@@ -335,7 +333,7 @@ def update_file(f_csv):
 
                     print("\nYou added: Student Name: " + new_student_name + ", Student ID: " + id +
                           ", Student Marks: " + str(marks) + ", Letter Grade: " + grade + "\n")
-                    entry = input("\nDo you want to add another student? (enter: Y or N): ")
+                    entry = input("\nDo you want to add another student? (enter: Y or ***N): ")
 
                     if entry not in "Yy":
                         break
