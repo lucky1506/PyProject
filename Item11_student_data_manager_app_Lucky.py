@@ -10,8 +10,9 @@ import statistics
 # ****************************************************************************
 
 
-#  Item 16
 def filename_check(filename):
+    """ This function checks for a valid filename entered by the user."""
+
     alpha = "abcdefghijklmnopqrstuvwxyz"
     numbers = "0123456789"
     symbols = "_.-"
@@ -30,8 +31,10 @@ def filename_check(filename):
                 return False
     return True
 
-# Item 6
+
 def print_all(file_to_print):
+    """ This function takes a file and reads and prints out the entire file data to console ."""
+
     student_dic = load_csv_file_to_dictionary(file_to_print)
     the_number_of_students = len(student_dic.keys())
     all_keys = student_dic.keys()
@@ -69,8 +72,6 @@ def print_all(file_to_print):
         else:
             break
 
-
-# Item5
 def print_only_summary_of_student_data(fname):
     """ This function prints a summary of a student data file """
 
@@ -117,7 +118,6 @@ def print_only_summary_of_student_data(fname):
     print("______________________________________________________________________")
 
 
-#  Item 15
 def does_file_exist(file_name):
     """
     This function takes in a file name or a path. It
@@ -126,7 +126,6 @@ def does_file_exist(file_name):
     file and not to a directory. These functions eliminates
     the need for catching exception.
     """
-
     while True:
         if file_name != "":
             if os.path.exists(file_name) and os.path.isfile(file_name):
@@ -138,8 +137,6 @@ def does_file_exist(file_name):
             print("\nYou exit to the main menu.")
             return None
 
-
-#  Item 14
 def get_non_empty_input(question):
     """ This function checks for non empty input and prompts
     the user to enter a data """
@@ -153,7 +150,6 @@ def get_non_empty_input(question):
     return value
 
 
-#  Item 13
 def write_from_dictionary_to_file(d_file, filename):
     """ This method writes comma separated values from dictionary to file"""
 
@@ -167,8 +163,6 @@ def write_from_dictionary_to_file(d_file, filename):
         f.write(value["Student Name"] + "," + key + "," + str(value["Final Marks"]) + "," + value["Final Grade"] + "\n")
     f.close()
 
-
-#  Item 12
 def load_csv_file_to_dictionary(f_name):
     """
     This function opens a csv file and stores data from the
@@ -194,8 +188,6 @@ def load_csv_file_to_dictionary(f_name):
         student_id_data[student_id]["Final Grade"] = final_grade
     return student_id_data
 
-
-#  Item 8
 def is_all_digit(user_input):
     """
     This function validates user entry.
@@ -208,8 +200,6 @@ def is_all_digit(user_input):
             return False
     return True
 
-
-#  Item 7
 def calculate_letter_grade(marks):
     """
         This function calculates  and returns the letter
@@ -233,15 +223,12 @@ def calculate_letter_grade(marks):
         return "A"
 
 
-# Item 4_Search
 def search_student(search_file, id_lookup):
     """
     This function takes a file name and an id to search
-    a student in the file. First it reads the data from
+    a student in that file. First it reads the data from
     the file in a dictionary in memory. Then it looks for
-    id in in the dictionary. It returns the search result.
-    It allows the user to searc for another student in the
-    same file, or exit to main menu.
+    the id in the dictionary and returns the search result.
     """
 
     dictionary_file = load_csv_file_to_dictionary(search_file)
@@ -254,8 +241,6 @@ def search_student(search_file, id_lookup):
     else:
         print("\nStudent Id " + id_lookup + " does not exist.\n")
 
-
-# Item 3
 def remove_a_student(remove_from_file, remove_id):
     """
     This function takes an ID and a file name and removes the
@@ -273,12 +258,12 @@ def remove_a_student(remove_from_file, remove_id):
     else:
         print("\nId " + remove_id + " not found.\n")
 
-
-# Item 2
 def update_file(f_csv):
     """ This function allows users to add a new student to an existing file,
         or update an existing student name, or update an existing student
-        final marks, or to remove an existing student from a file.
+        final marks, or remove an existing student from a file. An ID is
+        allowed to modify. If an Id needs to be modified, user will need to
+        remove the ID, and add as a new entry.
     """
 
     dictionary_d = load_csv_file_to_dictionary(f_csv)
@@ -377,13 +362,12 @@ def update_file(f_csv):
             print("\nInvalid selection. Select a number from the menu.")
 
 
-#  Item 1 - create new csv file
 def create_new_file(file_name):
     """
     This function takes a name for a file and creates a new student data file
     with comma separated 4 columns, and with its 1st row as the header for
     Student Name, ID, Marks and Letter Grade. User may enter student data in
-    this new file before closing or quit to close the new file.
+    this new file before closing or quiting to close the new file.
     """
 
     new_file = open(file_name, "w")
@@ -420,10 +404,9 @@ def create_new_file(file_name):
         entry = input("Do you want to enter another data? (enter: 1 for Yes, or enter any key to Exit): ")
     new_file.close()
 
-#  Item 9
 def student_data_manager(user_input):
-    """ This function takes in  user input and checks:
-        1) for input is only a digit
+    """ This function takes in  user input and checks for:
+        1) input is only a digit
         2) if digit, it checks if inputs are valid menu selections: only 0 - 6
         3) if not valid, prompts for correct entry
         Returns 1 : if input is not digit (invalid case)
@@ -502,7 +485,6 @@ def student_data_manager(user_input):
             if valid_file != None:
                 print_all(valid_file)
 
-
     # invalid main menu selection(not 0,1,2,3,4,5,6)
     else:
         print("\nInvalid selection. Select a number from the menu.")
@@ -511,7 +493,6 @@ def student_data_manager(user_input):
     return 3
 
 
-#  Item 10
 def main():
     """ This is the main function(). It prints out the main MENU of the database app,
         prompts the users for a menu selection and reads and passes the user entry to
@@ -534,6 +515,4 @@ def main():
         read_entry = input("Enter a selection from the menu (Or 0 to quit): ")
         if student_data_manager(read_entry) == 2:
             break
-
-
 main()
